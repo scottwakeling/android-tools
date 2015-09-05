@@ -1,0 +1,15 @@
+--- a/extras/ext4_utils/make_ext4fs_main.c
++++ b/extras/ext4_utils/make_ext4fs_main.c
+@@ -184,8 +184,11 @@
+ 		}
+ 		fs_config_func = canned_fs_config;
+ 	} else if (mountpoint) {
++#ifdef ANDROID
++    // Only used by build_directory_structure when #ifdef ANDROID
+     fs_config_func = fs_config;
+-	}
++#endif
++  }
+ 
+ 	if (wipe && sparse) {
+ 		fprintf(stderr, "Cannot specifiy both wipe and sparse\n");

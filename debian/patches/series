@@ -1,0 +1,6 @@
+add-bq-vendor-id.patch
+remove-selinux-android.patch
+use-capability.patch
+use-local-socket.patch
+ppc64el-ftbfs.patch
+remove-fs-config-android.patch

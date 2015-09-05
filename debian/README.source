@@ -1,0 +1,24 @@
+android-tools for Debian
+------------------------
+
+The upstream tarball is based of these upstream Android git repos:
+    git clone https://android.googlesource.com/platform/system/core
+    git clone https://android.googlesource.com/platform/system/extras
+
+with unneeded files removed.
+
+The debian/create-snapshot script may be used to generate an
+android-tools.tar.xz from the latest upstream; see this script for a list of
+files to copy from upstream into the tarball.
+
+
+udev rules
+----------
+
+The udev rules were derived from this project:
+https://github.com/M0Rf30/android-udev-rules
+
+The direct download link is:
+https://raw.githubusercontent.com/M0Rf30/android-udev-rules/master/51-android.rules
+
+ -- Hans-Christoph Steiner <hans@eds.org>, Tue, 21 Oct 2014 00:16:55 -0400

@@ -1,0 +1,242 @@
+android-tools (5.1.1+git20150904-0.1) unstable; urgency=medium
+
+  * New upstream version.
+
+ -- Scott James Wakeling <scott@diskfish.org>  Fri, 04 Sep 2015 22:09:55 +0100
+
+android-tools (4.2.2+git20130529-5.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * add patch for CVE-2014-1909 (Closes: #770513)
+
+ -- Hilko Bengen <bengen@debian.org>  Mon, 24 Nov 2014 21:35:22 +0100
+
+android-tools (4.2.2+git20130529-5) unstable; urgency=low
+
+  * use system group 'adb' for udev rules (Closes: #766399)
+
+ -- Hans-Christoph Steiner <hans@eds.org>  Wed, 22 Oct 2014 19:43:35 -0400
+
+android-tools (4.2.2+git20130529-4) unstable; urgency=low
+
+  [ Hans-Christoph Steiner ]
+  * set "Android Tools" as Maintainer, add myself as Uploader, remove Marcin
+  * update udev rules (Closes: #690453, #754566)
+  * fix odd language in Description (Closes: #710785)
+  * fix missing word in adb Description (Closes: #745358)
+  * include AndroidConfig.h in builds (Closes: #700461)
+  * include bash completion rules for adb and fastboot
+  * fix build failure on ppc64el
+
+  [ Ramakrishnan Muthukrishnan ]
+  * include man page for fastboot (Closes: #741967)
+
+ -- Hans-Christoph Steiner <hans@eds.org>  Tue, 21 Oct 2014 22:39:19 -0400
+
+android-tools (4.2.2+git20130529-3) unstable; urgency=low
+
+  * Update my email address.
+
+  [ Hilko Bengen <bengen@debian.org> ]
+  * Fix previous local socket patch for adb
+    (Closes: #715238, #716996, #717525)
+
+ -- Laszlo Boszormenyi (GCS) <gcs@debian.org>  Tue, 23 Jul 2013 23:51:22 +0200
+
+android-tools (4.2.2+git20130529-2.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * adb: Use local socket by default (Closes: #694176)
+
+ -- Hilko Bengen <bengen@debian.org>  Thu, 04 Jul 2013 23:28:34 +0200
+
+android-tools (4.2.2+git20130529-2) unstable; urgency=low
+
+  * Misc fixes to adbd upstart job.
+  * Misc fixes to adbd env props support patch.
+  * Bump up Standards-Version to 3.9.4.
+  * Use canonical Vcs-Git format.
+
+ -- Loïc Minier <lool@debian.org>  Wed, 19 Jun 2013 17:16:18 +0200
+
+android-tools (4.2.2+git20130529-1) unstable; urgency=low
+
+  * Drop Architecture: linux-any field in the Source control stanza as that
+    breaks Launchpad and creates an useless delta with Ubuntu; drop it;
+    inspired from changes by Logan Rosen in 4.2.2+git20130218-3ubuntu1.
+  * Use uaccess in udev rules instead of deprecated udev-acl; thanks
+    Martin Pitt.
+  * Update udev rules to support more devices: 18d1:4e30 (fastboot on
+    maguro/toro), 18d1:4ee0 (fastboot on mako/manta) and 18d1:d002 (adb
+    recovery) and split rules in corresponding packages; from
+    4.2.2+git20130218-3ubuntu3; thanks Sergio Schvezov.
+  * Add Vcs-Git
+  * Drop bogus external/zlib include in makefiles.
+  * Rework the makefiles and build rules to use a builddir per component
+    we're building.  This paves the way to building adbd and adb out of the
+    same source, keeps the source tree clean and for some reason also fixes
+    ccache.
+  * Various changes and patches to help with adbd build:
+    - adb.mk: Define _XOPEN_SOURCE _GNU_SOURCE as in Android.mk.
+    - Add patch to use glibc syscall() for reboot.
+    - Add patch to use linux/capability.h on linux systems.
+    - Add patch to fake Android init properties via env vars.
+    - Update create-snapshot script to pull more sources needed for adbd; pull
+      libhardware includes from libhardware repo and private filesystem and
+      capability includes from core repo.
+    - Add local makefile to build adbd
+  * On Ubuntu and derivatives, build adbd binary and corresponding package
+    with upstart job taken from Ubuntu package 4.2.2+git20130218-3ubuntu9;
+    this is disabled on Debian and derivatives because it's essentially a
+    security hole in the form of an unauthenticated remote root shell.
+  * New upstream snapshot 4.2.2+git20130529; this is mainly to pick up new
+    source files but also picks up a number of minor upstream fixes.
+    - Add build-dep on libcap-dev for sys/capability.h.
+  * Add patch adbd-use-user-shell from Ubuntu by Stéphane Graber to use the
+    running user's shell by default.
+
+ -- Loïc Minier <lool@debian.org>  Wed, 19 Jun 2013 00:17:40 +0200
+
+android-tools (4.2.2+git20130218-3) unstable; urgency=low
+
+  * Only build for linux hosts; adb / fastboot also lack an USB host
+    implementation for kFreeBSD and Hurd, and need a PATH_MAX on Hurd too.
+
+ -- Loïc Minier <lool@debian.org>  Thu, 21 Mar 2013 02:14:09 +0100
+
+android-tools (4.2.2+git20130218-2) unstable; urgency=low
+
+  * Only build android-tools-fastboot and android-tools-fsutils on linux
+    ports; the MINGW implementation could be used as a basis for a partial
+    port, but requires careful review.
+  * Always use $triplet-gcc as compiler to simplify rules; thanks Adam Conrad.
+  * core/include/mincrypt/* is under BSD-3; thanks Ansgar Burchardt.
+
+ -- Loïc Minier <lool@debian.org>  Thu, 21 Mar 2013 01:04:18 +0100
+
+android-tools (4.2.2+git20130218-1) unstable; urgency=low
+
+  * Add myself to Uploaders with Marcin's permission; also sponsor NEW
+    android-tools-fsutils binary package.
+  * Improve long descriptions a bit.
+
+ -- Loïc Minier <lool@debian.org>  Mon, 18 Feb 2013 16:33:46 +0100
+
+android-tools (4.2.2+git20130218-0ubuntu2) raring; urgency=low
+
+  * Update README.source to mention debian/create-snapshot.
+  * Move added makefiles to debian/makefiles instead of painfully maintaining
+    these as patches.
+  * Add some metadata to debian/create-snapshot.
+  * Use $(MAKE) and $(INSTALL_PROGRAM) instead of plain "make" and "install"
+    in rules.
+  * Drop useless DH_OPTIONS export.
+  * Set CC to gcc by default instead of using "cc"; this is more consistent
+    with the cross-compiling case.
+  * export CC instead of passing it in all make calls.
+  * Add header with author and description to Android selinux patch.
+
+ -- Loïc Minier <loic.minier@ubuntu.com>  Mon, 18 Feb 2013 15:56:29 +0100
+
+android-tools (4.2.2+git20130218-0ubuntu1) raring; urgency=low
+
+  [ Sergio Schvezov ]
+  * Updated upstream code:
+    core: 523a20901b2afce7ad02c0011d70ed57f8bbb997
+    extras: 261e0f9c260cd708e6b7e6f98a35ee9d31ebc01c
+  * Added new dependencies to debian/control
+  * Add new patch to drop Android selinux include.
+
+  [ Loïc Minier ]
+  * Add new debian/create-snapshot script to take a snapshot of the latest
+    sources; maintains a list of files to keep instead of the list of files to
+    remove in debian/README.source.
+  * Fix hand-modified patches to have proper hunk headings.
+  * Fix ext4_utils build: update ext4_utils makefile to link with selinux, and
+    update Android selinux patch to drop include in ext4_utils code as well.
+
+ -- Loïc Minier <loic.minier@ubuntu.com>  Mon, 18 Feb 2013 13:40:22 +0100
+
+android-tools (4.1.1+git20120801-1ubuntu2) raring; urgency=low
+
+  * Add udev rules to allow fastboot flashing Nexus7.
+
+ -- Dmitrijs Ledkovs <dmitrij.ledkov@ubuntu.com>  Mon, 14 Jan 2013 13:52:12 +0000
+
+android-tools (4.1.1+git20120801-1ubuntu1) raring; urgency=low
+
+  * Build extras/ext4_utils as well.
+  * Build for any architecture. (Closes: 690455)
+  * Add android-tools-ext4-utils package.
+
+ -- Dmitrijs Ledkovs <dmitrij.ledkov@ubuntu.com>  Mon, 05 Nov 2012 17:54:05 +0000
+
+android-tools (4.1.1+git20120801-1) unstable; urgency=low
+
+  * Initial upload to Debian (closes: #685178), based on the work of Marcin
+    Juszkiewicz.
+  * Make the package amd64 and i386 only. ARM needs testing.
+
+ -- Laszlo Boszormenyi (GCS) <gcs@debian.hu>  Tue, 14 Aug 2012 12:24:28 +0000
+
+android-tools (4.1.1+git20120801-0ubuntu1) quantal; urgency=low
+
+  * Updated upstream code:
+    core:   23ee469c4b790634959e5ccf83134f44e73fb72b
+    extras: 983ce5738cee0bf78b87d6274fe1387129768302
+  * Fixed debian/copyright to be DEP-5 compatible.
+  * Added license information for all files.
+  * Dropped not needed include files.
+  * Dropped core/fastboot/enfineering_key.p12 file.
+
+ -- Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>  Wed, 01 Aug 2012 11:19:27 +0200
+
+android-tools (4.1.1+git20120713-0ubuntu1) quantal; urgency=low
+
+  * New upstream release.
+    core:   2177c79bddc66e295599d87007d4cbec549e1cac
+    extras: d2b6666effb387c9052cd63378c6d5ddd1c0d1c7
+  * Removed -D_GNU_SOURCE -D_XOPEN_SOURCE from adb's makefile.
+  * Added extras/ext4_utils directory from platform/system/extras git (for
+  	fastboot)
+
+ -- Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>  Fri, 13 Jul 2012 15:59:49 +0200
+
+android-tools (4.0.4-20120618-1~linaro1) precise; urgency=low
+
+  * New upstream release.
+  * New way of building adb/fastboot: instead of re-using Android build system
+  	I used makefile from
+  	http://blog.alexworld.it/post/9707276488/how-to-build-android-adb-on-arm
+  	and wrote similar version for fastboot. No embedded zlib anymore.
+  * Added README.source with information how to update package.
+  * Added cross compilation support.
+  * Added hardening support.
+  * Added small descriptions to patches.
+
+ -- Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>  Mon, 18 Jun 2012 09:42:57 +0200
+
+android-tools (2.3.5-11.09.2) precise; urgency=low
+
+  * Added Archos USB Vendor ID to list of supported vendors
+  * Cleaned patches
+
+ -- Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>  Mon, 06 Feb 2012 18:11:32 -0800
+
+android-tools (2.3.5-11.09.1) oneiric; urgency=low
+
+  * Fixed build dependencies to get it buildable on i386.
+
+ -- Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>  Mon, 07 Nov 2011 16:26:36 +0100
+
+android-tools (2.3.5-11.09) natty; urgency=low
+
+  * Package and updated for natty.
+
+ -- Tom Gall <tom.gall@linaro.org>  Mon, 26 Sep 2011 16:18:10 -0500
+
+android-tools (1.0.26-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Marcin Juszkiewicz <marcin.juszkiewicz@linaro.org>  Thu, 10 Feb 2011 14:03:37 +0100

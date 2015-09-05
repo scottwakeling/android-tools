@@ -1,0 +1,6 @@
+Currently this package is only built on linux-based Debian architectures.
+
+To build on kfreebsd, this source requires porting of the selinux calls in
+extras/ext4_utils and core/fastboot/usb_*.c.
+
+Concerning hurd, even more porting work is needed for e.g. the USB stack.

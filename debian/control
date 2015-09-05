@@ -1,0 +1,59 @@
+Source: android-tools
+Section: devel
+Priority: extra
+Maintainer: Android tools Maintainer <android-tools-devel@lists.alioth.debian.org>
+Uploaders: Laszlo Boszormenyi (GCS) <gcs@debian.org>,
+           Hans-Christoph Steiner <hans@eds.org>,
+           Loïc Minier <lool@debian.org>
+Build-Depends: debhelper (>= 9),
+               android-system-dev,
+               libcap-dev,
+               libselinux-dev,
+               libssl-dev,
+               python,
+               zlib1g-dev,
+               bash-completion
+Standards-Version: 3.9.6
+Homepage: http://developer.android.com/guide/developing/tools/adb.html
+Vcs-Git: https://anonscm.debian.org/git/android-tools/android-tools.git
+Vcs-Browser: http://anonscm.debian.org/cgit/android-tools/android-tools.git
+
+Package: android-tools-adb
+# requires porting of selinux calls in extras/ext4_utils and
+# core/fastboot/usb_*.c implementation; hurd
+Architecture: linux-any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Android Debug Bridge CLI tool
+ Android Debug Bridge (adb) is a versatile tool that lets you manage the state
+ of an emulator instance or Android-powered device. It is a client-server
+ program that includes three components:
+ .
+ A client, which runs on your development machine. You can invoke a
+ client from a shell by issuing an adb command. Other Android tools such
+ as the ADT plugin and DDMS also create adb clients.
+ .
+ A server, which runs as a background process on your development
+ machine.  The server manages communication between the client and the
+ adb daemon running on an emulator or device.
+ .
+ A daemon, which runs as a background process on each emulator or device
+ instance.
+
+Package: android-tools-fastboot
+Architecture: linux-any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Android Fastboot protocol CLI tool
+ Fastboot is a diagnostic protocol primarily used to update the flash
+ filesystem of Android devices over USB.
+ .
+ This package provides the fastboot command-line tool.
+
+Package: android-tools-fsutils
+Architecture: linux-any
+Depends: ${misc:Depends}, ${python:Depends}, ${shlibs:Depends}
+Description: Android ext4 utilities with sparse support
+ Android images (.img) are typically ext4 filesystems in a special
+ sparse file format.  These are tools to help make that format.
+ .
+ This package provides the utilities to deal with Android sparse ext4
+ images.

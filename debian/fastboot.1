@@ -1,0 +1,193 @@
+.TH fastboot
+.SH NAME
+fastboot \- manipulate the non-volatile flash partitions
+.SH SYNOPSIS
+.B fastboot
+[\fIoptions\fR]
+[\fIcommands\fR]
+.SH DESCRIPTION
+.B fastboot
+is a program used to manipulate (list, install, erase) the non-volatile
+memory such as flash filesystem partitions on devices that adhere to the
+fastboot protocol, via a USB connection from a host computer. It requires
+that the device be started in a boot loader mode with the fastboot 
+protocol enabled. Once connected to the device, the program accepts a 
+specific set of commands sent to it via the USB using the fastboot 
+program on the host.
+.PP
+fastboot is primarily used for installing the operating system binary
+`images' into the non-volatile flash memory of the devices.
+.PP
+The partition should adhere to a specific layout. Fastboot was designed
+for use with phones and tablets running the Android operating system.
+.PP
+To allow non-root user access to the devices, one might needed to add
+udev rules file for the specific device and add the user to the 
+appopriate group (typically the group is named \fIplugdev\fR).
+.PP
+If the device is not connected, certain fastboot commands display the
+output:
+.PP
+    < waiting for the device >
+.br 
+.PP
+and waits till it detects and establish a fastboot connection with
+the connected device. Otherwise, it prints a helpful list of commands
+and switches and exits.
+.SH OPTIONS
+.TP
+.BR \-w
+Erase userdata and cache and format, if supported by the partition type.
+.TP
+.BR \-u
+Do not first erase partition before formatting.
+.TP
+.BR \-s " " \fIdevice\fR
+Specify device serial number or path to device port.
+.IP
+The device serial number can also be set by setting the environment
+variable ANDROID_SERIAL.
+.TP
+.BR \-l
+Lists device paths. Works only with the command \fIdevices\fR.
+.TP
+.BR \-p " " \fIproduct\fR
+Specify the device product name.
+.IP
+Normally `fastboot' binary is built when building Android from the source
+using the `Android Open Source Project' (AOSP) repositories. Assuming 
+\fI$aosp\fR is the root of the AOSP source code, the output binaries and 
+images are stored in the $AOSP/out directory. `fastboot' binary lives in
+`$AOSP/out/host/linux-x86/bin' directory. If run from this directory, the
+images are looked for in `../../../target/product/$product' directory
+where $product is specified with the `\-p' switch.
+.IP
+If this switch is not set, the environment variable ANDROID_PRODUCT_OUT
+should be set to the directory containing the binary images.
+.IP
+This switch is generally specified with the \fIflash\fR and \fIflashall\fR
+commands.
+.TP
+.BR \-c " " \fIcommandline\fR
+Override linux kernel command line. This switch is typically used along
+with the command \fIboot\fR. See the EXAMPLES section for a typical usage.
+.TP
+.BR \-i " " \fIVendorID\fR
+Specify a custom USB Vendor ID for the device.
+.TP
+.BR \-b " " \fIbase_addr\fR
+Specify a custom linux kernel base address.
+.TP
+.BR \-n " " \fIpagesize\fR
+Specify page size for the flash device. Default value is 2048.
+.TP
+.BR \-S " " \fIsize[K|M|G]\fR
+Automatically sparse files greater than the specified \fIsize\fR. Specify
+the \fIsize\fR as 0 to disable sparse files.
+.SH COMMANDS
+.TP
+.BR update " " \fIfilename\fR
+Reflash the device from the give update file. The filename must be a zip
+file.
+.TP
+.BR flashall
+Reflash boot partition, recovery partition and the system partition.
+.TP
+.BR flash " " \fIpartition\fR " " [\fIfilename\fR]
+Write the given file to the specified partition.
+.TP
+.BR erase " " \fIpartition\fR
+Erase a flash partition.
+.TP
+.BR format " " \fIpartition\fR
+Format a flash partition.
+.TP
+.BR getvar " " \fIvariable\fR
+Display a bootloader variable.
+.TP
+.BR boot " " \fIkernel\fR " " [\fIramdisk\fR]
+Download and boot kernel.
+.TP
+.BR flash:raw " " boot " " \fIkernel\fR " " [\fIramdisk\fR]
+Create boot image and flash it.
+.TP
+.BR devices
+List all connected devices.
+.TP
+.BR continue
+Continue with autoboot.
+.TP
+.BR reboot\-bootloader
+Reboot device into bootloader.
+.TP
+.BR reboot
+.RS
+Reboot the device normally..
+.RE
+.TP
+.BR help
+.RS
+Show a help message.
+.RE
+.SH ENVIRONMENT
+.B ANDROID_PRODUCT_OUT
+.IP
+This variable should be set to the root of the directory where the 
+images for the specific product is stored. 
+.PP
+.B ANDROID_SERIAL
+.IP
+Thie variable can be used to specify the device serial number.
+.SH EXAMPLES
+.nf
+1. Flashing the recovery image:
+	fastboot flash recovery recovery.img
+
+2. Flash the kernel and bootloader:
+	fastboot flash boot boot.img
+
+3. Erase a partition:
+	fastboot erase cache
+
+4. Reboot the phone:
+	fastboot reboot
+
+5. Boot with a custom built kernel and root filesystem (but not write them into the flash memory):
+	fastboot boot linux-2.6/arch/arm/boot/zImage root-image/recovery.img-ramdisk.cpio.gz
+
+6. Format partitions:
+	fastboot format cache
+	fastboot format userdata
+
+7. Flash all partitions at once:
+	fastboot \-w flashall
+
+8. Restoring from backed up images in the user's computer::
+	fastboot erase system
+	fastboot erase data
+	fastboot erase cache
+   and then flash the images (starting with system):
+	fastboot flash system system.img
+	fastboot flash data data.img
+	fastboot flash cache cache.img
+
+9. Boot the phone with a specific linux kernel commandline argument:
+	fastboot \-c "console=ttyHSL0,115200,n8" boot boot.img
+
+.fi
+.SH DIAGNOSTICS
+Make sure that the device is connected and is visible via \fIlsusb\fR. 
+If the device is detected by `\fIlsusb\fR' and `\fIadb devices\fR' output
+shows `\fI???????????? device\fR', then try reloading udev rules or
+try disconnecting and connecting the cables.
+.SH BUGS
+The command name should have been chosen more carefully to reflect its
+purpose.
+.SH AUTHOR
+.B fastboot
+was written by engineers at Google for the Android project.
+.PP
+Ramakrishnan Muthukrishnan wrote this manual page, originally for the
+Debian Project, with a lot of suggestions from Raul Miller.
+.SH SEE ALSO
+\fBadb\fP(1), \fBudev\fP(7), \fBlsusb\fP(8)

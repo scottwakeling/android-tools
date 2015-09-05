@@ -1,0 +1,61 @@
+Subject: adb: Use local sockets where appropriate
+Author: Hilko Bengen <bengen@debian.org>
+
+Index: android-tools/core/adb/adb.c
+===================================================================
+--- android-tools.orig/core/adb/adb.c  2013-07-19 23:26:22.408974096 +0200
++++ android-tools/core/adb/adb.c       2013-07-19 23:26:22.396974391 +0200
+@@ -1154,7 +1154,11 @@ int launch_server(int server_port)
+  */
+ void build_local_name(char* target_str, size_t target_size, int server_port)
+ {
+-  snprintf(target_str, target_size, "tcp:%d", server_port);
++  if (gListenAll > 0) {
++    snprintf(target_str, target_size, "tcp:%d", server_port);
++  } else {
++    snprintf(target_str, target_size, "local:%d", server_port);
++  }
+ }
+ 
+ #if !ADB_HOST
+Index: android-tools/core/adb/adb_client.c
+===================================================================
+--- android-tools.orig/core/adb/adb_client.c   2013-07-19 23:26:22.408974096 +0200
++++ android-tools/core/adb/adb_client.c        2013-07-19 23:26:22.396974391 +0200
+@@ -185,12 +185,12 @@ int _adb_connect(const char *service)
+         strcpy(__adb_error, "service name too long");
+         return -1;
+     }
+-    snprintf(tmp, sizeof tmp, "%04x", len);
++    snprintf(tmp, sizeof tmp, "%d", __adb_server_port);
+ 
+     if (__adb_server_name)
+         fd = socket_network_client(__adb_server_name, __adb_server_port, SOCK_STREAM);
+     else
+-        fd = socket_loopback_client(__adb_server_port, SOCK_STREAM);
++        fd = socket_local_client(tmp, ANDROID_SOCKET_NAMESPACE_ABSTRACT, SOCK_STREAM);
+ 
+     if(fd < 0) {
+         strcpy(__adb_error, "cannot connect to daemon");
+@@ -201,6 +201,7 @@ int _adb_connect(const char *service)
+         return -1;
+     }
+ 
++    snprintf(tmp, sizeof tmp, "%04x", len);
+     if(writex(fd, tmp, 4) || writex(fd, service, len)) {
+         strcpy(__adb_error, "write failure during connection");
+         adb_close(fd);
+Index: android-tools/core/adb/transport_local.c
+===================================================================
+--- android-tools.orig/core/adb/transport_local.c      2013-07-19 23:26:22.408974096 +0200
++++ android-tools/core/adb/transport_local.c   2013-07-19 23:26:22.400974292 +0200
+@@ -118,7 +118,8 @@ int local_connect_arbitrary_ports(int co
+     }
+ #endif
+     if (fd < 0) {
+-        fd = socket_loopback_client(adb_port, SOCK_STREAM);
++        snprintf(buf, sizeof buf, "%d", adb_port);
++        fd = socket_local_client(buf, ANDROID_SOCKET_NAMESPACE_ABSTRACT, SOCK_STREAM);
+     }
+ 
+     if (fd >= 0) {
