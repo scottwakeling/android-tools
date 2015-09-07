@@ -1,6 +1,6 @@
-android-tools (5.1.1+git20150904-0.1) unstable; urgency=medium
+android-tools (5.1.1+git20150904-1) unstable; urgency=medium
 
-  * New upstream version.
+  * New upstream version. (Closes: #781332, #798305, #738119, #797273)
 
  -- Scott James Wakeling <scott@diskfish.org>  Fri, 04 Sep 2015 22:09:55 +0100
 
